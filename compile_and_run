@@ -1,2 +1,4 @@
 g++ main.cpp -o main.out
 ./main.out
+
+http://cs-fundamentals.com/c-programming/arrays-in-c.php
