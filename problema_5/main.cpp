@@ -12,17 +12,26 @@ void itos(int , char *);
 
 int main()
 {
-    int num=-123;
     char * str;
+    str = new char [23];//reservamos memoria
+    int num=0; //numero a convertir
+    std::cout<<"inserte el numero que desea convertir a string:"<<std::endl;
+    std::cin>>num;
+    std::cout<<std::endl;
+    //int num2=0; //esta linea estaba antes porque sino me daba error de segmentacion
+    //despues me di cuenta de que era porque no estaba reservando memoria para el puntero
+
     itos(num, str);
     std::cout<<str<<std::endl;
     return 0;
 }
 
+
+
 void itos(int N, char * s)
 {
-    //N es el numero a convertir
-    //s es el apuntador a la primera posicion de la cadena
+    //N es el numero a convertir, por valor
+    //s es el apuntador a la primera posicion de la cadena, por referencia ya que es un apuntador
 
     int i=0;//contador que recorre el arreglo de caracteres
     int j=1;//contador que recorre los digitos del numero
@@ -32,16 +41,18 @@ void itos(int N, char * s)
         {
             *(s+0)='-';
             i++;//aumentamos el contador del arreglo en 1 para ir al siguiente caracter
-            N=N*-1;//volvemos el numero positivo, note que como
+            N=N*-1;//volvemos el numero positivo, note que como N se paso por valor no se modifica la variable original
         }
 
     while(j<=number_of_digits(N))
         {
             *(s+i)=48 + n_digit(N,j);
-            j++;
-            i++;
+            //recorremos la cadena igualando cada elemento el enesimo digito contados de izquierda a derecha
+            //el offset de 48 es debido a la conversion en la tabla ascii, 48 es el 0, entonces 48 + el enesimo digito es el enesimo digito en ascii
+            j++;//pasamos al siguiente digito
+            i++;//pasamos al siguiente elemento de la cadena
         }
-    *(s+i)='\0';
+    *(s+i)='\0';//al finalizar insertamos un fin de string en el elemento (ya i se encontraba en la siguiente posicion de memoria al ultimo caracter)
 }
 
 
