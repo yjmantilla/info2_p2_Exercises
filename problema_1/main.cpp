@@ -26,8 +26,8 @@ using namespace std;
 
 int main()
 {
-    //Uso matrices de dimension numero_billetes*2. Se guarda en formato: billete_i, cantidad del billete_i
-    //se asume escoje un orden descendente de monedas para que el algoritmo de la cantidad de billetes y monedas mas optimo
+    //Uso matrices de dimension numero_billetes*2. Se guarda en formato: [billete_i, cantidad del billete_i]
+    //se escoje un orden descendente de monedas para que el algoritmo de la cantidad de billetes y monedas mas optimo
 
     int bill[Nb+Nm][2]={{50000,0},
                      {20000,0},
@@ -48,7 +48,8 @@ int main()
     {
         //basicamente se hace la asignacion: cantidad de billetes_i = money / billete_i
         //la division es un float / integer por lo que lo hace de manera entera
-        //uso esta notacion para acostumbrarme a ella....
+
+        //uso la siguiente notacion para acostumbrarme a ella...
         //*(*(bill+i)+1) recorre la 2da columna con la cantidad de billetes y monedas
         //(*(*(bill+i)+0)) recorre la 1ra columna con el valor de los billetes y monedas
 
