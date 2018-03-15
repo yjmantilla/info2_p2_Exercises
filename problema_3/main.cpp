@@ -9,12 +9,13 @@ Luego pide al usuario que ingrese dos strings y los compara.
 
 
 #include <iostream>
+#define max 37
 
 //prototipos de funciones
 int str_size (char * );
 bool str_cmp( char * , char * );
 void str_print(char * );
-void input_str( char *);
+
 
 int main()
 {
@@ -26,8 +27,8 @@ int main()
     char str5[]= "hello world?";
     char * str6;
     char * str7;
-    str6= new char [37]; //reservamos memoria
-    str7= new char [37]; //reservamos memoria
+    str6= new char [max]; //reservamos memoria
+    str7= new char [max]; //reservamos memoria
     //comparacion de los strings
     //1:true, 0:false
     std::cout<<str1<<" vs "<<str2<<std::endl<<"comparacion dio: "<<str_cmp(str1,str2);
@@ -43,14 +44,15 @@ int main()
     std::cout<<std::endl<<std::endl;
 
     std::cout<<"Inserte strings a comparar:"<<std::endl;
+    std::cout<<"String 1:"<<std::endl;
     std::cout<<std::endl;
 
-    input_str(str6);
-
+    std::cin.getline(str6,max);
     std::cout<<std::endl;
+    std::cout<<"String 2:"<<std::endl;
     std::cout<<std::endl;
 
-    input_str(str7);
+    std::cin.getline(str7,max);
 
     std::cout<<std::endl;
     std::cout<<std::endl;
@@ -136,21 +138,4 @@ void str_print(char * a)
             std::cout<<*(a+i); //imprimimos el caracter actual
             i++;//pasamos al siguiente
         }
-}
-
-
-//funcion que permite que el usuario ingrese un string por consola, el usuario puede ingresar los caracteres en una misma linea
-void input_str( char * s)
-{
-    int i=0; //contador que recorre la cadena
-    std::cout<<"Inserte string, finalize en . para terminar (el punto no sera parte del string):"<<std::endl;
-
-    while(1)
-    {
-        std::cin>>*(s+i); //igualamos la entrada a la posicion actual de la cadena
-        if(*(s+i) == '.'){*(s+i)='\0';break;} //si el usuario presiona enter nos salimos del ciclo y escribimos fin de string en esa posicion
-        i++;//avanzamos a la siguiente posicion
-
-    }
-
 }
