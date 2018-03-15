@@ -49,6 +49,8 @@ int main()
 
     std::cin.getline(str6,max);
     std::cout<<std::endl;
+
+    //aparentemente es recomendable colocar algun texto entre los cin ya que si no, no se comporta bien
     std::cout<<"String 2:"<<std::endl;
     std::cout<<std::endl;
 
