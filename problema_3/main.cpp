@@ -3,7 +3,8 @@ Problema 3. Haga una función que compare 2 cadenas de caracteres y retorno un v
 iguales y falso en caso contrario, no olvide también tener en cuenta la longitud de las cadenas. Escriba un programa
 de prueba.
 
-El programa de prueba muestra varias comparaciones de string y dice si son iguales (1) o diferentes (0)
+El programa de prueba muestra varias comparaciones de string y dice si son iguales (1) o diferentes (0).
+Luego pide al usuario que ingrese dos strings y los compara.
 */
 
 
@@ -13,6 +14,7 @@ El programa de prueba muestra varias comparaciones de string y dice si son igual
 int str_size (char * );
 bool str_cmp( char * , char * );
 void str_print(char * );
+void input_str( char *);
 
 int main()
 {
@@ -22,7 +24,10 @@ int main()
     char str3[]= "hello world";
     char str4[]= "1234";
     char str5[]= "hello world?";
-
+    char * str6;
+    char * str7;
+    str6= new char [37]; //reservamos memoria
+    str7= new char [37]; //reservamos memoria
     //comparacion de los strings
     //1:true, 0:false
     std::cout<<str1<<" vs "<<str2<<std::endl<<"comparacion dio: "<<str_cmp(str1,str2);
@@ -37,6 +42,22 @@ int main()
     std::cout<<str1<<" vs "<<str5<<std::endl<<"comparacion dio: "<<str_cmp(str1,str5);
     std::cout<<std::endl<<std::endl;
 
+    std::cout<<"Inserte strings a comparar:"<<std::endl;
+    std::cout<<std::endl;
+
+    input_str(str6);
+
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+
+    input_str(str7);
+
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+
+    std::cout<<str6<<" vs "<<str7<<std::endl<<"comparacion dio: "<<str_cmp(str6,str7);
+
+    std::cout<<std::endl;
     return 0;
 }
 
@@ -115,4 +136,21 @@ void str_print(char * a)
             std::cout<<*(a+i); //imprimimos el caracter actual
             i++;//pasamos al siguiente
         }
+}
+
+
+//funcion que permite que el usuario ingrese un string por consola, el usuario puede ingresar los caracteres en una misma linea
+void input_str( char * s)
+{
+    int i=0; //contador que recorre la cadena
+    std::cout<<"Inserte string, finalize en . para terminar (el punto no sera parte del string):"<<std::endl;
+
+    while(1)
+    {
+        std::cin>>*(s+i); //igualamos la entrada a la posicion actual de la cadena
+        if(*(s+i) == '.'){*(s+i)='\0';break;} //si el usuario presiona enter nos salimos del ciclo y escribimos fin de string en esa posicion
+        i++;//avanzamos a la siguiente posicion
+
+    }
+
 }
