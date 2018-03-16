@@ -88,7 +88,7 @@ int main()
 
     /*Se muestra el numero de estrellas encontradas*/
     line line
-    std::cout<<"Se han encontrado "<<number_of_stars(galaxy,height,width)<<" en la galaxia.";
+    std::cout<<"Se han encontrado "<<number_of_stars(galaxy,height,width)<<" estrellas en la galaxia.";
     line line
 
     /*Se muestra la ubicacion de las estrellas*/
@@ -195,49 +195,71 @@ void matrix_print_char(char ** matrix,int rows, int columns)
 }
 
 /*
- * Decidi no ignorar los bordes de la foto, por eso necesito esta funcion. para saber si el elemento i,j de la matriz existe
+ * Decidi no ignorar los bordes de la foto, por eso necesito esta funcion. para saber si el elemento i,j de la matriz existe.
  */
 bool DoesItExist(int i, int j, int rows, int columns)
 {
     bool exist;
+    /*
+	Basicamente el elemento i,j existe si se cumplen las siguientes dos condiciones:
+	0<=i<rows (de 0 a rows-1)
+	0<=j<columns (de 0 a columns-1)
+    */
     exist=(0<= i && i<rows)&&(0<=j && j<columns);
     return exist;
 }
 
+/*
+	Esta funcion realiza el promedio del punto ij sumado con los puntos inmeadiatamente alreadedor de el en forma de cruz(si existen).
+	Ejemplo:
+	b	
+      d a c ---> (a+b+c+d+e)/5, en caso de que este en una esquina ignora ese numero, para lograr eso pregunta si el punto ij existe en la matriz y lo suma si existe.
+	e
+*/
 bool star(int ** matrix, int i, int j, int rows, int columns)
 {
-    float sum=0;
+    float sum=0; /*Acumula la suma, siempre que el elemento exista, se le suma el elemento, sino no hace nada*/
 
-    if(DoesItExist(i,j,rows,columns)){sum=sum+*(*(matrix+i)+j);}
+    if(DoesItExist(i,j,rows,columns)){sum=sum+*(*(matrix+i)+j);} //punto medio
 
-    if(DoesItExist(i,j-1,rows,columns)){sum=sum+*(*(matrix+i)+j-1);}
+    if(DoesItExist(i,j-1,rows,columns)){sum=sum+*(*(matrix+i)+j-1);} //punto izquierda
 
-    if(DoesItExist(i,j+1,rows,columns)){sum=sum+*(*(matrix+i)+j+1);}
+    if(DoesItExist(i,j+1,rows,columns)){sum=sum+*(*(matrix+i)+j+1);} //punto derecha
 
-    if(DoesItExist(i-1,j,rows,columns)){sum=sum+*(*(matrix+i-1)+j);}
+    if(DoesItExist(i-1,j,rows,columns)){sum=sum+*(*(matrix+i-1)+j);} //punto arriba
 
-    if(DoesItExist(i+1,j,rows,columns)){sum=sum+*(*(matrix+i+1)+j);}
+    if(DoesItExist(i+1,j,rows,columns)){sum=sum+*(*(matrix+i+1)+j);} //punto abajo
 
-    sum=sum/5;
+    sum=sum/5;//se divide para obtener el promedio
 
-    if (sum>min_star){return true;}
+    if (sum>min_star){return true;} //si el promedio es mayor que el minimo requerido entonces el punto ij es una estrella
     else{return false;}
 }
 
+/*
+	Esta funcion retorna cuantas estrellas hay en la matriz de entrada
+*/
 int number_of_stars(int ** matrix,int rows, int columns)
 {
-    int N=0;
+    int N=0;//numero de estrellas
+	
+    //iteramos sobre todos los elementos de la matriz
+
     for (int i =0; i<rows;i++)//iteramos sobre cada fila
     {
         for (int j=0;j<columns;j++)//para cada fila iteramos las columnas
         {
-            if(star(matrix,i,j,rows,columns)){N++;}
+            if(star(matrix,i,j,rows,columns)){N++;} //preguntamos si el punto actual es una estrella , en ese caso aumentamos el contador
         }
 
     }
     return N;
 }
 
+/* 
+	Funcion que dada una matriz de entrada (source) rowsxcolumns de la galaxia, ubica en otra del mismo tamanyo (target) las posiciones de las estrellas
+	marca con 'x' las estrellas y con '_' los puntos que no son estrellas.
+*/
 void locate_stars(int ** source,char ** target,int rows, int columns)
 {
 
@@ -245,8 +267,8 @@ void locate_stars(int ** source,char ** target,int rows, int columns)
     {
         for (int j=0;j<columns;j++)//para cada fila iteramos las columnas
         {
-            if(star(source,i,j,rows,columns)){*(*(target+i)+j)='x';}
-            else {*(*(target+i)+j)='_';}
+            if(star(source,i,j,rows,columns)){*(*(target+i)+j)='x';}//si el punto ij de source es una estrella entonces llena el punto ij del target con 'x'
+            else {*(*(target+i)+j)='_';} //si no es una estrella el punto ij entonces se llena con '_'
         }
 
     }
