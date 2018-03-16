@@ -1,0 +1,12 @@
+g++ main.cpp -o main
+git config user.name
+git config user.email
+mkdir
+ls
+./executable
+
+git add --all
+
+git commit -m "meassge"
+
+git push
