@@ -2,7 +2,7 @@ int array_to_int(char *array);
 char incomingBytes[100];   // for incoming serial data
 int convertednumber=0;
 
-
+//usar unsigned long int
 
 
 void setup() {
