@@ -98,10 +98,14 @@ void zeros_to_left(char * source,char *target,int n)
 {
     int pos=0;//definicion e inicializacion del numero de lugares
 
-    //buscamos el minimo pos que asegura que el tamanyo del string sea divisible exactamente por n
-    //para ello comenzamos con pos=0 y vemos si es divisible, sino aumentamos en 1 'pos'.
-    //y asi sucesivamente hasta encontrar el minimo 'pos' que cumple la condicion
-
+/*
+	buscamos el minimo pos que asegura que el tamanyo del string sea divisible exactamente por n
+	para ello comenzamos con pos=0 y vemos si es divisible, sino aumentamos en 1 'pos'.
+	y asi sucesivamente hasta encontrar el minimo 'pos' que cumple la condicion
+	
+	Basicamente se busca el multiplo mas pequeño de n que es mayor o igual al tamanyo de la cadena.
+	El algoritmo es inefectivo ya que va probando uno por uno, a lo mejor hay una forma mas elegante y optima de hacerlo.
+*/
     while((str_size(source)+pos)%n!=0)
     {
         pos++;
