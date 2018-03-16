@@ -228,3 +228,23 @@ int sum_each_n(int n, char * s)
     //retornamos la suma
     return sum;
 }
+
+
+/*
+ * Me di cuenta que este problema se podia resolver mas facilmente en la parte de hacer la suma
+ * ya con el string con ceros a la izquierda se empezaba desde la primera posicion
+ * se crea un acumulador de suma y dado el n que subdivide el string se empieza por la izquierda a iterar la cadena
+ * se crea un contador ciclo que se resetee cada vez que hayamos sumado n numeros
+ * luego con ese contador se crea la suma de la siguiente manera
+ * ciclo=n;
+ * sum= aij*pow(10,ciclo-1); ciclo--;
+ * cuando ciclo es igual a cero se resetea ciclo=n;
+ * de tal manera que si el numero es 123456 quedaria y n=3:
+ * 1*100+2*10+3 --> se resetea ciclo
+ * 4*100+5*10+6 --> se resetea ciclo
+ * y asi sucesivamente hasta cumplir que que haya echo esto tamanyo_cadena/n veces
+ * esto asumiendo que se resolvio el problema de convertir el caracter a entero
+ *
+ * de esta forma no es necesario crear sub-strings
+
+*/
