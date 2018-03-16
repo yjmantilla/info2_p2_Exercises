@@ -24,12 +24,13 @@ de estrellas encontradas en la imagen. Ignore las posibles estrellas que puedan 
 
 # define line std::cout<<std::endl;
 
-#define height 6
-#define width 8
-#define lower 0
-#define upper 15
-#define min_star 6
+#define height 6 //altura de la imagen
+#define width 8 //ancho de la imagen
+#define lower 0 //minima luz de un punto de la imagen
+#define upper 15 //maxima luz de un punto de la imagen
+#define min_star 6 //minimo valor para que se considere una estrella
 
+//prototipos de funciones
 void matrix_reserve(int ** ,int,int);
 void matrix_init_rand(int ** , int , int );
 void matrix_print_int(int **,int, int );
@@ -42,12 +43,15 @@ void locate_stars(int ** ,char ** ,int, int );
 
 int main()
 {
+    /*se creara un arreglo aleatorio para llenar la matriz de la imagen de la galaxia*/
     /* initialize random seed: */
     srand (time(NULL));
 
 
-    int ** galaxy;
-    char **stars;
+    int ** galaxy; /*La matriz de la galaxia*/
+    char **stars; /*Matriz que guardara la posicion de las estrellas*/
+
+    /*Reserva de las matrices:*/
 
     galaxy = new int * [height];//reservamos para apuntador 'rows' veces apuntadores a int
     for(int i=0;i<height;i++)
@@ -59,25 +63,35 @@ int main()
     stars = new char * [height];//reservamos para apuntador 'rows' veces apuntadores a int
     for(int i=0;i<height;i++)
     {
-        //a cada fila se le reserva 'columns' veces variables int
+        //a cada fila se le reserva 'columns' veces variables char
         *(stars+i)= new char [width];
     }
 
-
+    /* Se habia creado una funcion que reservaba una matriz pero tiene problemas */
     //matrix_reserve(galaxy, height, width); //esta funcion da problemas de segmentacion
 
-    //inicializacion de la matriz galaxia
+
+    /*Inicializacion de la matriz galaxia con enteros aleatorios*/
     matrix_init_rand(galaxy,height,width);
+
+    /*Inicializacion de la matriz que muestra la posicion de las estrellas*/
+    matrix_init_spaces(stars,height,width);
+
+    /*Se comienza la interaccion con el usuario*/
 
     std::cout<<"Se mostrara la matriz de la cantidad de luz en cada punto de la imagen:";
     line line
+
+    /*Se muestra al usuario la matriz de la galaxia que se va a utilizar*/
     matrix_print_int(galaxy,height,width);
     line line
-    matrix_init_spaces(stars,height,width);
 
+    /*Se muestra el numero de estrellas encontradas*/
     line line
     std::cout<<"Se han encontrado "<<number_of_stars(galaxy,height,width)<<" en la galaxia.";
     line line
+
+    /*Se muestra la ubicacion de las estrellas*/
     std::cout<<"A continuacion se mostrara la ubicacion de las estrellas en la galaxia:";
     line line
     locate_stars(galaxy,stars,height,width);
@@ -87,7 +101,7 @@ int main()
     return 0;
 }
 
-//por alguna razon esta funcion produce error de segmentacion
+/*Funcion que reservaba una matriz de tamanyo rowsxcolums, pero da error de segmentacion*/
 void matrix_reserve(int ** matrix,int rows,int columns)
 {
         matrix = new int * [rows];//reservamos para apuntador 'rows' veces apuntadores a int
@@ -99,39 +113,65 @@ void matrix_reserve(int ** matrix,int rows,int columns)
 
 }
 
+/*Funcion que inicializa una matrix de enteros de tamanyo rowsxcolumns con numeros enteros aleatorios*/
 void matrix_init_rand(int ** matrix, int rows, int columns)
 {
         for (int i =0; i<rows;i++) //iteramos sobre cada fila
         {
-            for (int j=0;j<columns;j++)//para cada fila iteramos los asientos
+            for (int j=0;j<columns;j++)//para cada fila iteramos las columnas
             {
                 *(*(matrix + i)+j)=(rand() + lower)%(upper+1);//volvemos la posicion i j de la matriz un numero aleatorio
+                /*la expresion (rand() + lower)%(upper+1) la saque de internet, aun no la entiendo del todo*/
             }
         }
 
-
 }
 
+/*Funcion que inicializa una matrix de caracteres de tamanyo rowsxcolumns con el caracter de espacio*/
 void matrix_init_spaces(char ** matrix, int rows, int columns)
 {
         for (int i =0; i<rows;i++) //iteramos sobre cada fila
         {
-            for (int j=0;j<columns;j++)//para cada fila iteramos los asientos
+            for (int j=0;j<columns;j++)//para cada fila iteramos las columnas
             {
                 *(*(matrix + i)+j)=' ';//volvemos la posicion i j de la matriz un numero aleatorio
             }
         }
 
-
 }
 
+/*
+ * NOTA: Las dos funciones de inicializacion se pueden modificar para que se le pase
+ * el valor de la inicializacion como un argumento.
+ * Sin embargo en el caso de la inicializacion aleatoria no serviria porque llenaria la matriz
+ * con el mismo numero aleatorio en todas sus posiciones
+*/
+
+/*Funcion que imprime una matriz de enteros de tamanyo rowsxcolumns*/
 
 void matrix_print_int(int ** matrix,int rows, int columns)
 {
     for (int i =0; i<rows;i++)//iteramos sobre cada fila
     {
-        for (int j=0;j<columns;j++)//para cada fila imprimimos los asientos
+        for (int j=0;j<columns;j++)//para cada fila imprimimos las columnas
         {
+            /*
+             * Se trata de imprimir la matriz con el formato correcto de tal manera que quede recta
+             * Ejemplo:
+             *
+             * Sin formato correcto
+             * 10 11
+             * 1 2
+             *
+             * Con formato correcto:
+             * 10 11
+             *  1  2
+             *
+             * Si el numero es de dos digitos (es mayor a 9 ya que los aleatorios que creamos son menores o iguales a 15 se imprime un solo espacio.
+             * En otro caso el numero debe ser de un digito segun la condicion ya dada de los aleatorios generados, se imprimen dos espacios
+             *
+             * Falta crear funcion que devuelva tantos espacios como sean necesarios segun el orden del numero
+             */
             if(*(*(matrix + i)+j)>9){std::cout<<*(*(matrix + i)+j)<<" ";}
             else {std::cout<<*(*(matrix + i)+j)<<"  ";}
 
@@ -140,22 +180,23 @@ void matrix_print_int(int ** matrix,int rows, int columns)
     }
 }
 
+/*Funcion que imprime una matriz de caracteres de tamanyo rowsxcolumns*/
 
 void matrix_print_char(char ** matrix,int rows, int columns)
 {
     for (int i =0; i<rows;i++)//iteramos sobre cada fila
     {
-        for (int j=0;j<columns;j++)//para cada fila imprimimos los asientos
+        for (int j=0;j<columns;j++)//para cada fila imprimimos las columnas
         {
-            if(*(*(matrix + i)+j)>9){std::cout<<*(*(matrix + i)+j)<<" ";}
-            else {std::cout<<*(*(matrix + i)+j)<<"  ";}
-
+            std::cout<<*(*(matrix + i)+j)<<" ";
         }
         line//al terminar una fila imprimimos un salto de linea para imprimir la siguiente
     }
 }
 
-//decidi no ignorar los bordes de la foto, por eso necesito esta funcion. para saber si el elemento i,j de la matriz existe
+/*
+ * Decidi no ignorar los bordes de la foto, por eso necesito esta funcion. para saber si el elemento i,j de la matriz existe
+ */
 bool DoesItExist(int i, int j, int rows, int columns)
 {
     bool exist;
