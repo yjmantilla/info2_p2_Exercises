@@ -105,6 +105,9 @@ void zeros_to_left(char * source,char *target,int n)
 	
 	Basicamente se busca el multiplo mas pequeño de n que es mayor o igual al tamanyo de la cadena.
 	El algoritmo es inefectivo ya que va probando uno por uno, a lo mejor hay una forma mas elegante y optima de hacerlo.
+
+	NOTA: El algoritmo sirve aun cuando el tamanyo de la cadena es menor que el numero en la que se quiere subdividir, en
+	ese caso el algoritmo basicamente agrega (n-tamanyo de la cadena) ceros
 */
     while((str_size(source)+pos)%n!=0)
     {
