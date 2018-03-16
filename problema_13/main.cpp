@@ -28,12 +28,17 @@ de estrellas encontradas en la imagen. Ignore las posibles estrellas que puedan 
 #define width 8
 #define lower 0
 #define upper 15
-#define star 6
+#define min_star 6
 
 void matrix_reserve(int ** ,int,int);
-void matrix_init(int ** , int , int );
-void matrix_print(int **,int, int );
-
+void matrix_init_rand(int ** , int , int );
+void matrix_print_int(int **,int, int );
+void matrix_print_char(char **,int, int );
+bool DoesItExist(int , int , int , int );
+bool star(int ** , int , int , int , int );
+void matrix_init_spaces(char ** , int , int );
+int number_of_stars(int ** ,int , int );
+void locate_stars(int ** ,char ** ,int, int );
 
 int main()
 {
@@ -42,6 +47,7 @@ int main()
 
 
     int ** galaxy;
+    char **stars;
 
     galaxy = new int * [height];//reservamos para apuntador 'rows' veces apuntadores a int
     for(int i=0;i<height;i++)
@@ -50,12 +56,34 @@ int main()
         *(galaxy+i)= new int [width];
     }
 
-    //matrix_reserve(galaxy, height, width);
-    matrix_init(galaxy,height,width);
-    matrix_print(galaxy,height,width);
+    stars = new char * [height];//reservamos para apuntador 'rows' veces apuntadores a int
+    for(int i=0;i<height;i++)
+    {
+        //a cada fila se le reserva 'columns' veces variables int
+        *(stars+i)= new char [width];
+    }
 
 
+    //matrix_reserve(galaxy, height, width); //esta funcion da problemas de segmentacion
 
+    //inicializacion de la matriz galaxia
+    matrix_init_rand(galaxy,height,width);
+
+    std::cout<<"Se mostrara la matriz de la cantidad de luz en cada punto de la imagen:";
+    line line
+    matrix_print_int(galaxy,height,width);
+    line line
+    matrix_init_spaces(stars,height,width);
+
+    line line
+    std::cout<<"Se han encontrado "<<number_of_stars(galaxy,height,width)<<" en la galaxia.";
+    line line
+    std::cout<<"A continuacion se mostrara la ubicacion de las estrellas en la galaxia:";
+    line line
+    locate_stars(galaxy,stars,height,width);
+    line line
+    matrix_print_char(stars,height,width);
+    line line
     return 0;
 }
 
@@ -71,7 +99,7 @@ void matrix_reserve(int ** matrix,int rows,int columns)
 
 }
 
-void matrix_init(int ** matrix, int rows, int columns)
+void matrix_init_rand(int ** matrix, int rows, int columns)
 {
         for (int i =0; i<rows;i++) //iteramos sobre cada fila
         {
@@ -84,7 +112,21 @@ void matrix_init(int ** matrix, int rows, int columns)
 
 }
 
-void matrix_print(int ** matrix,int rows, int columns)
+void matrix_init_spaces(char ** matrix, int rows, int columns)
+{
+        for (int i =0; i<rows;i++) //iteramos sobre cada fila
+        {
+            for (int j=0;j<columns;j++)//para cada fila iteramos los asientos
+            {
+                *(*(matrix + i)+j)=' ';//volvemos la posicion i j de la matriz un numero aleatorio
+            }
+        }
+
+
+}
+
+
+void matrix_print_int(int ** matrix,int rows, int columns)
 {
     for (int i =0; i<rows;i++)//iteramos sobre cada fila
     {
@@ -95,5 +137,76 @@ void matrix_print(int ** matrix,int rows, int columns)
 
         }
         line//al terminar una fila imprimimos un salto de linea para imprimir la siguiente
+    }
+}
+
+
+void matrix_print_char(char ** matrix,int rows, int columns)
+{
+    for (int i =0; i<rows;i++)//iteramos sobre cada fila
+    {
+        for (int j=0;j<columns;j++)//para cada fila imprimimos los asientos
+        {
+            if(*(*(matrix + i)+j)>9){std::cout<<*(*(matrix + i)+j)<<" ";}
+            else {std::cout<<*(*(matrix + i)+j)<<"  ";}
+
+        }
+        line//al terminar una fila imprimimos un salto de linea para imprimir la siguiente
+    }
+}
+
+//decidi no ignorar los bordes de la foto, por eso necesito esta funcion. para saber si el elemento i,j de la matriz existe
+bool DoesItExist(int i, int j, int rows, int columns)
+{
+    bool exist;
+    exist=(0<= i && i<rows)&&(0<=j && j<columns);
+    return exist;
+}
+
+bool star(int ** matrix, int i, int j, int rows, int columns)
+{
+    float sum=0;
+
+    if(DoesItExist(i,j,rows,columns)){sum=sum+*(*(matrix+i)+j);}
+
+    if(DoesItExist(i,j-1,rows,columns)){sum=sum+*(*(matrix+i)+j-1);}
+
+    if(DoesItExist(i,j+1,rows,columns)){sum=sum+*(*(matrix+i)+j+1);}
+
+    if(DoesItExist(i-1,j,rows,columns)){sum=sum+*(*(matrix+i-1)+j);}
+
+    if(DoesItExist(i+1,j,rows,columns)){sum=sum+*(*(matrix+i+1)+j);}
+
+    sum=sum/5;
+
+    if (sum>min_star){return true;}
+    else{return false;}
+}
+
+int number_of_stars(int ** matrix,int rows, int columns)
+{
+    int N=0;
+    for (int i =0; i<rows;i++)//iteramos sobre cada fila
+    {
+        for (int j=0;j<columns;j++)//para cada fila iteramos las columnas
+        {
+            if(star(matrix,i,j,rows,columns)){N++;}
+        }
+
+    }
+    return N;
+}
+
+void locate_stars(int ** source,char ** target,int rows, int columns)
+{
+
+    for (int i =0; i<rows;i++)//iteramos sobre cada fila
+    {
+        for (int j=0;j<columns;j++)//para cada fila iteramos las columnas
+        {
+            if(star(source,i,j,rows,columns)){*(*(target+i)+j)='x';}
+            else {*(*(target+i)+j)='_';}
+        }
+
     }
 }
