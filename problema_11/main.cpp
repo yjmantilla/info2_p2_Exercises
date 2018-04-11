@@ -139,18 +139,39 @@ int itoindex(int i)
 //funcion que dado un fila (en letras mayusculas) y el numero del asiento, lo cancela
 void cancel(char row, int spot, char ** array)
 {
-    *(*(array + ctoindex(row))+itoindex(spot))='-';
+    if(*(*(array + ctoindex(row))+itoindex(spot))=='+')
+    {
+        *(*(array + ctoindex(row))+itoindex(spot))='-';
+        line std::cout<<"Asiento cancelado!";line line
+    }
+    else
+    {line;std::cout<<"Error, este asiento aun no ha sido reservado";line;line;}
 }
 
 //funcion que dado un fila (en letras mayusculas) y el numero del asiento, lo reserva
 void reserve(char row, int spot, char ** array)
 {
-    *(*(array + ctoindex(row))+itoindex(spot))='+';
+    if(*(*(array + ctoindex(row))+itoindex(spot))=='-')
+    {
+        *(*(array + ctoindex(row))+itoindex(spot))='+';
+        line std::cout<<"Asiento reservado!";line line
+    }
+    else
+    {line std::cout<<"Error, este asiento ya fue reservado";line;line;}
+            line
 }
 
 //funcion que imprime la representacion bidimensional del cine
 void print_cine(char ** array)
 {
+    line
+    std::cout<<"Filas disponibles desde A hasta ";
+    std::cout<<(char) (rows + 65 - 1 );
+    line
+    std::cout<<("Asientos disponibles en cada fila desde 1 hasta ");
+    std::cout<<spots;
+    line
+    line
     for (int i =0; i<rows;i++)//iteramos sobre cada fila
     {
         for (int j=0;j<spots;j++)//para cada fila imprimimos los asientos
@@ -166,12 +187,23 @@ void print_cine(char ** array)
 void ask_spot(char &c, int &i)
 {
     line
+    while(1)
+    {
     std::cout<<"Ingrese fila del asiento:";
     line
+
     std::cin>>c;
+
+    if (65<=c && c <65+rows) {break;}
+    }
+
+    while(1)
+    {
     line
     std::cout<<"Ingrese numero del asiento:";
     line
     std::cin>>i;
+    if (1<=i && i <=spots) {break;}
+    }
     line
 }
